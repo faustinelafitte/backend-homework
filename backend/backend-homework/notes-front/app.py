@@ -1,11 +1,13 @@
-'''
-add a /api/users GET endpoint to list users
-'''
-VERSION = "03"
+"""
+/front/users serves a web page to see the users
+"""
+VERSION = "04"
 
 import json
+import requests
 from flask import Flask
 from flask import request
+from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 
@@ -72,6 +74,17 @@ def list_users():
     return [dict(
             id=user.id, name=user.name, email=user.email, nickname=user.nickname)
         for user in users]
+    
+    ## Frontend
+# for clarity we define our routes in the /front namespace
+# however in practice /front/users would probably be just /users
+
+# try it by pointing your browser to
+"""
+http://localhost:5001/front/users
+"""
+@app.route('/front/users')
+def front_users():
 
 
 # try it with
