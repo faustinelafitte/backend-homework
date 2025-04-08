@@ -1,7 +1,7 @@
-'''
-/api/messages/with/<user_id> returns users details
-'''
-VERSION = "11"
+"""
+/front/messages/<user_id> builds a html page to see messages
+"""
+VERSION = "12"
 
 import json
 from datetime import datetime as DateTime
@@ -133,14 +133,7 @@ def list_messages_to(recipient_id):
         
     # try it with
 """
-http :5001/api/messages author_id=1 recipient_id=2 content="trois petits chats"
-http :5001/api/messages author_id=2 recipient_id=1 content="chapeau de paille"
-http :5001/api/messages author_id=1 recipient_id=2 content="paillasson"
-http :5001/api/messages author_id=2 recipient_id=1 content="somnambule"
-http :5001/api/messages author_id=1 recipient_id=2 content="bulletin"
-http :5001/api/messages author_id=2 recipient_id=1 content="tintamarre"
-http :5001/api/messages author_id=2 recipient_id=3 content="not visible by 1"
-"""
+
 @app.route('/api/messages', methods=['POST'])
 def create_message():
     try:
@@ -162,10 +155,6 @@ def front_users():
 
 
 # try it with
-"""
-http :5001/api/users name="Alice Caroll" email="alice@foo.com" nickname="alice"
-http :5001/api/users name="Bob Morane" email="bob@foo.com" nickname="bob"
-"""
 @app.route('/api/users', methods=['POST'])
 def create_user():
     # we expect the user to send a JSON object
@@ -177,7 +166,22 @@ def create_user():
         nickname = parameters['nickname']
         print("received request to create user", name, email, nickname)
         # temporary
-
-
+# try it by pointing your browser to
+"""
+http://localhost:5001/front/messages/1
+"""
+@app.route('/front/messages/<int:recipient>')
+def front_messages(recipient):
+    # same as for the users, let's pretend we don't have direct access to the DB
+    url = request.url_root + f'/api/users/{recipient}'
+    req1 = requests.get(url)
+    if not (200 <= req1.status_code < 300):
+        return dict(error="could not request user info", url=url,
+                    status=req1.status_code, text=req1.text)
+    user = req1.json()
+    req2 = requests.get(request.url_root + f'/api/messages/with/{recipient}')
+    if not (200 <= req2.status_code < 300):
+        return dict(error="could not request messages list", url=url,
+                    
 if __name__ == '__main__':
     app.run()
