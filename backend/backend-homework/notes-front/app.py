@@ -1,13 +1,14 @@
-"""
-/front/users serves a web page to see the users
-"""
-VERSION = "04"
+'''
+redirect the / route to /front/users
+'''
+VERSION = "05"
 
 import json
 import requests
 from flask import Flask
 from flask import request
 from flask import render_template
+from flask import redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 
@@ -37,7 +38,9 @@ class User(db.Model):
 @app.route('/')
 def hello_world():
     return f'hello, this is a chat app! (version {VERSION})'
-
+  # redirect to /front/users
+    # actually this is just a rsponse with a 301 HTTP code
+    return redirect('/front/users')
 
 # try it with
 """
