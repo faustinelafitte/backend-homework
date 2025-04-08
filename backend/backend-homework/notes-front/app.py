@@ -1,7 +1,7 @@
-'''
-create a table for messages
-'''
-VERSION = "07"
+''''
+new POST endpoint /api/messages to create a message
+''''
+VERSION = "07b"
 
 import json
 from datetime import datetime as DateTime
@@ -99,6 +99,23 @@ def list_user(id):
             id=user.id, name=user.name, email=user.email, nickname=user.nickname)
     except Exception as exc:
         return dict(error=f"{type(exc)}: {exc}"), 422
+    
+    # try it with
+"""
+http :5001/api/messages author_id=1 recipient_id=2 content="trois petits chats"
+http :5001/api/messages author_id=2 recipient_id=1 content="chapeau de paille"
+http :5001/api/messages author_id=1 recipient_id=2 content="paillasson"
+http :5001/api/messages author_id=2 recipient_id=1 content="somnambule"
+http :5001/api/messages author_id=1 recipient_id=2 content="bulletin"
+http :5001/api/messages author_id=2 recipient_id=1 content="tintamarre"
+http :5001/api/messages author_id=2 recipient_id=3 content="not visible by 1"
+"""
+@app.route('/api/messages', methods=['POST'])
+def create_message():
+    try:
+        parameters = json.loads(request.data)
+        content = parameters['content']
+        author_id = parameters['author_id']
 
  
     ## Frontend
