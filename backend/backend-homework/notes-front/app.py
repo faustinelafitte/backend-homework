@@ -1,7 +1,7 @@
-""""
-create a table in the DB
-""""
-VERSION = "02b"
+"""
+add a /api/users POST endpoint to create a user
+"""
+VERSION = "02"
 
 from flask import Flask
 from flask import request
@@ -60,6 +60,23 @@ http :5001/api/version
 @app.route('/api/version')
 def version():
     return dict(version=VERSION)
+
+# try it with
+"""
+http :5001/api/users name="Alice Caroll" email="alice@foo.com" nickname="alice"
+http :5001/api/users name="Bob Morane" email="bob@foo.com" nickname="bob"
+"""
+@app.route('/api/users', methods=['POST'])
+def create_user():
+    # we expect the user to send a JSON object
+    # with the 3 fields name email and nickname
+    try:
+        parameters = json.loads(request.data)
+        name = parameters['name']
+        email = parameters['email']
+        nickname = parameters['nickname']
+        print("received request to create user", name, email, nickname)
+        # temporary
 
 
 if __name__ == '__main__':
