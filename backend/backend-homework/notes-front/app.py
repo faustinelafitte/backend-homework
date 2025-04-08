@@ -1,9 +1,10 @@
-'''
-add a /api/version endpoint to check the app version
-'''
-VERSION = "01c"
+""""
+create a table in the DB
+""""
+VERSION = "02b"
 
 from flask import Flask
+from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 
@@ -19,6 +20,16 @@ db_name = 'chat.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 # this variable, db, will be used for all SQLAlchemy commands
 db = SQLAlchemy(app)
+
+## define a table in the database
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    email = db.Column(db.String)
+    nickname = db.Column(db.String)
+
 
 @app.route('/')
 def hello_world():
