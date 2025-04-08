@@ -1,7 +1,7 @@
-"""
-/api/messages/with/<user_id> returns both from and to user
-"""
-VERSION = "10"
+'''
+/api/messages/with/<user_id> returns users details
+'''
+VERSION = "11"
 
 import json
 from datetime import datetime as DateTime
@@ -43,6 +43,9 @@ class Message(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     recipient_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     date = db.Column(db.DateTime)
+    # Define relationships (to fetch User objects directly)
+    author = db.relationship('User', foreign_keys=[author_id], backref='sent_messages')
+    recipient = db.relationship('User', foreign_keys=[recipient_id], backref='received_messages')
 
 @app.route('/')
 def hello_world():
