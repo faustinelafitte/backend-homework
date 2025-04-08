@@ -1,8 +1,9 @@
-"""
-add a /api/users POST endpoint to create a user
-"""
-VERSION = "02"
+'''
+add a /api/users GET endpoint to list users
+'''
+VERSION = "03"
 
+import json
 from flask import Flask
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
@@ -60,6 +61,18 @@ http :5001/api/version
 @app.route('/api/version')
 def version():
     return dict(version=VERSION)
+
+# try it with
+"""
+http :5001/api/users
+"""
+@app.route('/api/users', methods=['GET'])
+def list_users():
+    users = User.query.all()
+    return [dict(
+            id=user.id, name=user.name, email=user.email, nickname=user.nickname)
+        for user in users]
+
 
 # try it with
 """
