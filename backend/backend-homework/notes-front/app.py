@@ -1,7 +1,7 @@
-'''
-redirect the / route to /front/users
-'''
-VERSION = "05"
+"""
+new GET endpoint /api/users/<user_id> to retrieve a single user
+"""
+VERSION = "06"
 
 import json
 import requests
@@ -77,7 +77,22 @@ def list_users():
     return [dict(
             id=user.id, name=user.name, email=user.email, nickname=user.nickname)
         for user in users]
-    
+
+# try it with
+"""
+http :5001/api/users/1
+"""
+@app.route('/api/users/<int:id>', methods=['GET'])
+def list_user(id):
+    try:
+        # as id is the primary key
+        user = User.query.get(id)
+        return dict(
+            id=user.id, name=user.name, email=user.email, nickname=user.nickname)
+    except Exception as exc:
+        return dict(error=f"{type(exc)}: {exc}"), 422
+
+ 
     ## Frontend
 # for clarity we define our routes in the /front namespace
 # however in practice /front/users would probably be just /users
