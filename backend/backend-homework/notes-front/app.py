@@ -1,9 +1,10 @@
-"""
-new GET endpoint /api/users/<user_id> to retrieve a single user
-"""
-VERSION = "06"
+'''
+create a table for messages
+'''
+VERSION = "07"
 
 import json
+from datetime import datetime as DateTime
 import requests
 from flask import Flask
 from flask import request
@@ -34,6 +35,13 @@ class User(db.Model):
     email = db.Column(db.String)
     nickname = db.Column(db.String)
 
+class Message(db.Model):
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    date = db.Column(db.DateTime)
 
 @app.route('/')
 def hello_world():
