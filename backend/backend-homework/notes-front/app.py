@@ -1,7 +1,7 @@
-"""
-new GET /api/messages/ to retrieve all messages
-"""
-VERSION = "08"
+'''
+new GET /api/messages/with/<user_id> endpoint - first draft
+'''
+VERSION = "09"
 
 import json
 from datetime import datetime as DateTime
@@ -111,7 +111,24 @@ def list_messages():
             id=message.id, content=message.content, date=message.date,
             author_id=message.author_id, recipient_id=message.recipient_id)
         for message in messages]
-    
+
+# try it with
+"""
+http :5001/api/messages/with/1
+"""
+
+@app.route('/api/messages/with/<int:recipient_id>', methods=['GET'])
+def list_messages_to(recipient_id):
+    """"
+    returns only the messages to a given person
+    a first naive approach is to filter all messages by recipient_id
+    """"
+    messages = Message.query.filter_by(recipient_id=recipient_id).all()
+    return [
+        # rebuild dict (JSON-able) objects from the SQLAlchemy objects
+        
+        
+        
     # try it with
 """
 http :5001/api/messages author_id=1 recipient_id=2 content="trois petits chats"
