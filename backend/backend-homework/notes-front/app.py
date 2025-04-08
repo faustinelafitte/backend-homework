@@ -1,8 +1,7 @@
-
-"""
-add a /db/alive endpoint to check if the database is alive
-"""
-VERSION = "01b"
+'''
+add a /api/version endpoint to check the app version
+'''
+VERSION = "01c"
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -41,6 +40,16 @@ def db_alive():
         error_text = "<p>The error:<br>" + str(e) + "</p>"
         hed = '<h1>Something is broken.</h1>'
         return hed + error_text
+
+
+# try it with
+"""
+http :5001/api/version
+"""
+@app.route('/api/version')
+def version():
+    return dict(version=VERSION)
+
 
 if __name__ == '__main__':
     app.run()
